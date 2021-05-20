@@ -6,14 +6,14 @@ import shutil
 import subprocess
 
 import boto3 as boto3
-import botocore
 from botocore import UNSIGNED
 from botocore.config import Config
 from botocore.exceptions import ClientError
 from dateutil.relativedelta import relativedelta
 
+from grib import WGRIB_BIN
+
 BUCKET_NAME = 'noaa-hrrr-bdp-pds'
-WGRIB_BIN = os.path.expanduser('~/src/grib2/wgrib2/wgrib2')
 
 
 def decode_record(t):
