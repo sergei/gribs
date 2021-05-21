@@ -35,7 +35,7 @@ def parse_grib_index(grib_index):
     return records
 
 
-def get_one_day_small_grib(s3, start_date, hours_num, height_filter, type_filter, work_dir):
+def get_one_day_small_grib(s3, start_date, hours_num, height_filter, type_filter, work_dir, offset_by_days):
     small_grib_list = []
     fcst_hour = 0
     for i in range(hours_num):
@@ -69,9 +69,10 @@ def get_one_day_small_grib(s3, start_date, hours_num, height_filter, type_filter
 
                 t = local_grib_name.split('.')
                 small_local_grib_name = '.'.join(t[0:-1]) + '.small.' + t[-1]
-                print(f'Extract small grib to {small_local_grib_name}')
 
-                args = [WGRIB_BIN, local_grib_name, '-small_grib', '-123:-122', '36:38', small_local_grib_name]
+                print(f'Extract small grib to {small_local_grib_name}')
+                args = [WGRIB_BIN, local_grib_name, '-set_date', f'{offset_by_days:+}dy',
+                        '-small_grib', '-123:-122', '36:38', small_local_grib_name]
                 subprocess.run(args)
                 small_grib_list.append(small_local_grib_name)
 
@@ -105,8 +106,9 @@ def download_gribs(work_dir, start_date, hours_num, historical, days_span, years
         for year in range(years_span + 1):
             for day in range(-days_span, days_span + 1, 1):
                 grib_date = start_date - relativedelta(years=year) + datetime.timedelta(days=day)
-                print(f'grib_date = {grib_date}')
-                get_one_day_small_grib(s3, grib_date, hours_num, height_filter, type_filter, work_dir)
+                offset_by_days = (start_date - grib_date).days
+                print(f'grib_date = {grib_date} offset by {offset_by_days}dy')
+                get_one_day_small_grib(s3, grib_date, hours_num, height_filter, type_filter, work_dir, offset_by_days)
     else:
         print('Not supported yet')
 
