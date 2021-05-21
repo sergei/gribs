@@ -1,4 +1,5 @@
 --start-date=2020-05-25
+--race-date=2019-05-25
 --start-hour=18
 --hours-num=24
 --historical

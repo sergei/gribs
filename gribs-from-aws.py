@@ -98,7 +98,7 @@ def get_one_day_small_grib(s3, start_date, hours_num, height_filter, type_filter
         print(f'{out_grib_name} created.')
 
 
-def download_gribs(work_dir, start_date, hours_num, historical, days_span, years_span):
+def download_gribs(work_dir, start_date, race_date, hours_num, historical, days_span, years_span):
     s3 = boto3.client('s3', config=Config(signature_version=UNSIGNED))
     height_filter = ['10 m above ground']
     type_filter = ['UGRD', 'VGRD']
@@ -106,7 +106,7 @@ def download_gribs(work_dir, start_date, hours_num, historical, days_span, years
         for year in range(years_span + 1):
             for day in range(-days_span, days_span + 1, 1):
                 grib_date = start_date - relativedelta(years=year) + datetime.timedelta(days=day)
-                offset_by_days = (start_date - grib_date).days
+                offset_by_days = (race_date - grib_date).days
                 print(f'grib_date = {grib_date} offset by {offset_by_days}dy')
                 get_one_day_small_grib(s3, grib_date, hours_num, height_filter, type_filter, work_dir, offset_by_days)
     else:
@@ -116,19 +116,26 @@ def download_gribs(work_dir, start_date, hours_num, historical, days_span, years
 def gribs_from_aws(args):
     if args.historical is not None:
         start_date = datetime.datetime.strptime(args.start_date, '%Y-%m-%d')
+        race_date = datetime.datetime.strptime(args.race_date, '%Y-%m-%d')
     else:
         start_date = datetime.date.today()
+        race_date = datetime.date.today()
 
     start_date = start_date + datetime.timedelta(hours=args.start_hour)
     print(f'Starting date {start_date}')
 
-    download_gribs(args.work_dir, start_date, args.hours_num, args.historical, args.days_span, args.years_span)
+    race_date = race_date + datetime.timedelta(hours=args.start_hour)
+    print(f'Race date {race_date}')
+
+    download_gribs(args.work_dir, start_date, race_date, args.hours_num, args.historical, args.days_span,
+                   args.years_span)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(fromfile_prefix_chars='@')
     parser.add_argument("--work-dir", help="Directory to keep GRIB files", default='./data')
     parser.add_argument("--start-date", help="Starting date YYYY-MM-DD", required=False)
+    parser.add_argument("--race-date", help="Race date YYYY-MM-DD", required=False)
     parser.add_argument("--start-hour", help="Starting hour HH", required=False, type=int,  default=0)
     parser.add_argument("--hours-num", help="Number of hours to go back", required=False, type=int, default=24)
     parser.add_argument("--days-span", help="For historical data get that many days before and after", required=False,
