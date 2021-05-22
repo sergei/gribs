@@ -1,0 +1,4 @@
+--grib-file=data/gribs/hrrr-2018052618-24hrs.small.grib2
+--csv-file=data/spin-cup-2018-nav.csv
+--out-csv=data/comparison.csv
+--step-minutes=15
