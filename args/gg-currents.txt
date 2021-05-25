@@ -1,0 +1,3 @@
+--start-time=2021-05-29 02:42
+--input-clip=/Users/sergei/Desktop/current_high_gate_1cycle.iPad.mp4
+--output-clip=/Users/sergei/github/gribs/data/outclip.mp4
