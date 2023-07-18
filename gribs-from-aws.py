@@ -72,7 +72,7 @@ def get_one_day_small_grib(s3, start_date, hours_num, height_filter, type_filter
 
                 print(f'Extract small grib to {small_local_grib_name}')
                 args = [WGRIB_BIN, local_grib_name, '-set_date', f'{offset_by_days:+}dy',
-                        '-small_grib', '-123:-122', '36:38', small_local_grib_name]
+                        '-small_grib', '-72:-70', '41:42', small_local_grib_name]
                 subprocess.run(args)
                 small_grib_list.append(small_local_grib_name)
 

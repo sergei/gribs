@@ -1,0 +1,8 @@
+--start-date=2022-07-28
+--race-date=2023-07-28
+--start-hour=16
+--hours-num=48
+--historical
+--years-span=5
+--days-span=5
+--work-dir=data/h0-gribs-48
