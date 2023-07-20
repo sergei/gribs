@@ -6,12 +6,14 @@ import shutil
 import subprocess
 
 import boto3 as boto3
+import caffeine
 from botocore import UNSIGNED
 from botocore.config import Config
 from botocore.exceptions import ClientError
 from dateutil.relativedelta import relativedelta
 
 from grib import WGRIB_BIN
+from make_ens_grib import make_ensemble_grib
 
 BUCKET_NAME = 'noaa-hrrr-bdp-pds'
 
@@ -130,10 +132,15 @@ def gribs_from_aws(args):
     download_gribs(args.work_dir, start_date, race_date, args.hours_num, args.historical, args.days_span,
                    args.years_span)
 
+    # Join multiple  GRIBs into one ensemble grib
+    make_ensemble_grib(args.work_dir, args.out_grib_name)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(fromfile_prefix_chars='@')
     parser.add_argument("--work-dir", help="Directory to keep GRIB files", default='./data')
+    parser.add_argument("--out-grib-name", help="Name of the output ensemble GRIB", required=False,
+                        default='./data/output.grib2')
     parser.add_argument("--start-date", help="Starting date YYYY-MM-DD", required=False)
     parser.add_argument("--race-date", help="Race date YYYY-MM-DD", required=False)
     parser.add_argument("--start-hour", help="Starting hour HH", required=False, type=int,  default=0)
@@ -143,4 +150,6 @@ if __name__ == '__main__':
     parser.add_argument("--years-span", help="For historical data get that many years before", required=False,
                         type=int, default=0)
     parser.add_argument("--historical", help="Get historical winds using F0 only", required=False, action='store_true')
+    caffeine.on(display=False)
     gribs_from_aws(parser.parse_args())
+    caffeine.off()

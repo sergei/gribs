@@ -6,3 +6,4 @@
 --years-span=5
 --days-span=5
 --work-dir=data/h0-gribs-48
+--out-grib-name=data/solo-twin-hwy-48.grib2
