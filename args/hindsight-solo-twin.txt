@@ -1,0 +1,9 @@
+--start-date=2023-07-28
+--race-date=2023-07-28
+--start-hour=16
+--hours-num=24
+--historical
+--years-span=0
+--days-span=0
+--work-dir=data/h0-gribs-hindsight
+--out-grib-name=data/solo-hindsight.grib2
