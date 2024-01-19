@@ -16,6 +16,6 @@ if __name__ == '__main__':
     parser.add_argument("--tws", help="Wind speed [kts]", required=True)
     parser.add_argument("--twd", help="Wind direction [degrees]", required=True)
     parser.add_argument("--work-dir", help="Directory to keep clips", default='./data')
-    params = parser.parse_args()
+    params, unknown = parser.parse_known_args()
     make_constant_wind_grib(params)
 

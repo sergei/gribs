@@ -1,7 +1,7 @@
 --template-grib=data/3bf-template.grb2
---output-grib=data/3bf-northerly-wind.grib2
+--output-grib=data/3bf-southerly-wind.grib2
 --currents-src-grib=data/san-francisco-currents.grb
 --currents-out-grib=data/san-francisco-currents-3bf.grb
 --start-date-utc=2024-01-26
 --tws=5
---twd=10
+--twd=180
